@@ -1,0 +1,57 @@
+version: '2'
+
+services:
+  importer:
+    build: ../plebis-indexer/importer
+    networks:
+      - abyss
+    environment:
+      # the plebiscite db is currently hardcoded
+      - MONGO_HOST=mongodb://mongo:27017
+      - ES_HOST=es:9200
+    restart: always
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 800000
+        hard: 900000
+
+  mongo:
+    command: mongod --setParameter failIndexKeyTooLong=false
+    image: mongo:3.6.4
+    networks:
+      - abyss
+    volumes:
+      - ../db/mongodb:/data/db
+    restart: always
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 800000
+        hard: 900000
+
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+    networks:
+      - abyss
+    volumes:
+      - ../db/esdata:/usr/share/elasticsearch/data
+    expose:
+      - 9200
+      - 9300
+    restart: always
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 800000
+        hard: 900000
+
+networks:
+  abyss:
+    ipam:
+      driver: default
+      config:
+        - subnet: 254.253.0.0/16
+          ip_range: 254.253.252.0/24
+          gateway: 254.253.252.251
+

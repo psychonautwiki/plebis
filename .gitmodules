@@ -1,0 +1,6 @@
+[submodule "plebis-indexer"]
+	path = plebis-indexer
+	url = git@github.com:psychonautwiki/plebis-indexer.git
+[submodule "plebis-fe"]
+	path = plebis-fe
+	url = git@github.com:psychonautwiki/plebis-fe.git
