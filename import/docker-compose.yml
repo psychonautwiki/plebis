@@ -2,12 +2,12 @@ version: '2'
 
 services:
   importer:
-    build: ../plebis-indexer/importer
+    build: ../plebis-importer
     networks:
       - abyss
     environment:
       # the plebiscite db is currently hardcoded
-      - MONGO_HOST=mongodb://mongo:27017
+      - MONGO_URL=mongodb://mongo:27017
       - ES_HOST=es:9200
     restart: always
     ulimits:
