@@ -14,6 +14,35 @@ services:
         soft: 800000
         hard: 900000
 
+  importer:
+     build: ./plebis-importer
+     networks:
+       - abyss
+     environment:
+       # the plebiscite db is currently hardcoded
+       - MONGO_URL=mongodb://mongo:27017
+       - ES_HOST=es:9200
+     restart: always
+     ulimits:
+       nproc: 65535
+       nofile:
+         soft: 800000
+         hard: 900000
+
+  mongo:
+     command: mongod --setParameter failIndexKeyTooLong=false
+     image: mongo:3.6.4
+     networks:
+       - abyss
+     volumes:
+       - ./db/mongodb:/data/db
+     restart: always
+     ulimits:
+       nproc: 65535
+       nofile:
+         soft: 800000
+         hard: 900000
+
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
     networks:
@@ -32,7 +61,7 @@ services:
     networks:
       - abyss
     environment:
-      - FLY_TOKEN=xxx
+      - FLY_TOKEN=xxxx
       - FLY_LOCAL_ENDPOINT=plebis-fe:8080
     restart: always
     ulimits:
